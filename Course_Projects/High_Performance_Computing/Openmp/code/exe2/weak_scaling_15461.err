@@ -1,0 +1,55 @@
+linalg.cpp: In function ‘double linalg::hpc_dot(const data::Field&, const data::Field&, int)’:
+linalg.cpp:50:77: error: ‘N’ is predetermined ‘shared’ for ‘shared’
+     #pragma omp parallel for default(none) shared(x,y,N) reduction(+:result)
+                                                                             ^
+linalg.cpp: In function ‘void linalg::hpc_fill(data::Field&, double, int)’:
+linalg.cpp:75:61: error: ‘value’ is predetermined ‘shared’ for ‘shared’
+     #pragma omp parallel for default(none) shared(x,value,N)
+                                                             ^
+linalg.cpp:75:61: error: ‘N’ is predetermined ‘shared’ for ‘shared’
+linalg.cpp: In function ‘void linalg::hpc_axpy(data::Field&, double, const data::Field&, int)’:
+linalg.cpp:90:63: error: ‘alpha’ is predetermined ‘shared’ for ‘shared’
+     #pragma omp parallel for default(none) shared(alpha,x,y,N)
+                                                               ^
+linalg.cpp:90:63: error: ‘N’ is predetermined ‘shared’ for ‘shared’
+linalg.cpp: In function ‘void linalg::hpc_add_scaled_diff(data::Field&, const data::Field&, double, const data::Field&, const data::Field&, int)’:
+linalg.cpp:102:68: error: ‘alpha’ is predetermined ‘shared’ for ‘shared’
+     #pragma omp parallel for default(none) shared(alpha,x,y,N,l,r)
+                                                                    ^
+linalg.cpp:102:68: error: ‘N’ is predetermined ‘shared’ for ‘shared’
+linalg.cpp: In function ‘void linalg::hpc_scaled_diff(data::Field&, double, const data::Field&, const data::Field&, int)’:
+linalg.cpp:114:65: error: ‘alpha’ is predetermined ‘shared’ for ‘shared’
+     #pragma omp parallel for default(none) shared(alpha,y,N,l,r)
+                                                                 ^
+linalg.cpp:114:65: error: ‘N’ is predetermined ‘shared’ for ‘shared’
+linalg.cpp: In function ‘void linalg::hpc_scale(data::Field&, double, const data::Field&, int)’:
+linalg.cpp:125:63: error: ‘alpha’ is predetermined ‘shared’ for ‘shared’
+     #pragma omp parallel for default(none) shared(alpha,x,y,N)
+                                                               ^
+linalg.cpp:125:63: error: ‘N’ is predetermined ‘shared’ for ‘shared’
+linalg.cpp: In function ‘void linalg::hpc_lcomb(data::Field&, double, const data::Field&, double, const data::Field&, int)’:
+linalg.cpp:137:70: error: ‘alpha’ is predetermined ‘shared’ for ‘shared’
+     #pragma omp parallel for default(none) shared(alpha,x,y,N,beta,z)
+                                                                      ^
+linalg.cpp:137:70: error: ‘N’ is predetermined ‘shared’ for ‘shared’
+linalg.cpp:137:70: error: ‘beta’ is predetermined ‘shared’ for ‘shared’
+linalg.cpp: In function ‘void linalg::hpc_copy(data::Field&, const data::Field&, int)’:
+linalg.cpp:147:57: error: ‘N’ is predetermined ‘shared’ for ‘shared’
+     #pragma omp parallel for default(none) shared(x,y,N)
+                                                         ^
+make: *** [Makefile:23: linalg.o] Error 1
+/var/spool/slurmd/job15461/slurm_script: line 45: ./main: No such file or directory
+/var/spool/slurmd/job15461/slurm_script: line 45: ./main: No such file or directory
+/var/spool/slurmd/job15461/slurm_script: line 45: ./main: No such file or directory
+/var/spool/slurmd/job15461/slurm_script: line 45: ./main: No such file or directory
+/var/spool/slurmd/job15461/slurm_script: line 45: ./main: No such file or directory
+/var/spool/slurmd/job15461/slurm_script: line 45: ./main: No such file or directory
+/var/spool/slurmd/job15461/slurm_script: line 45: ./main: No such file or directory
+/var/spool/slurmd/job15461/slurm_script: line 45: ./main: No such file or directory
+/var/spool/slurmd/job15461/slurm_script: line 45: ./main: No such file or directory
+/var/spool/slurmd/job15461/slurm_script: line 45: ./main: No such file or directory
+/var/spool/slurmd/job15461/slurm_script: line 45: ./main: No such file or directory
+/var/spool/slurmd/job15461/slurm_script: line 45: ./main: No such file or directory
+/var/spool/slurmd/job15461/slurm_script: line 45: ./main: No such file or directory
+/var/spool/slurmd/job15461/slurm_script: line 45: ./main: No such file or directory
+/var/spool/slurmd/job15461/slurm_script: line 45: ./main: No such file or directory

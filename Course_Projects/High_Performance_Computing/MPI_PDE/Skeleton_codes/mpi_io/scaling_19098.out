@@ -1,0 +1,23 @@
+Loading openmpi/5.0.5
+  Loading requirement: gcc-runtime/8.5.0-gcc-8.5.0-7fyorqa
+    gmp/6.2.1-gcc-8.5.0-lrpcvy5 mpfr/4.2.1-gcc-8.5.0-ybeybcx
+    mpc/1.3.1-gcc-8.5.0-cv2gjfw zlib-ng/2.1.6-gcc-8.5.0-ztbc5xt
+    zstd/1.5.5-gcc-8.5.0-azepnn7 gcc/13.2.0-gcc-8.5.0-5hqhkwo
+    ucx/1.15.0-gcc-8.5.0-cnozz5i
+Loading python/3.11.7-gcc-8.5.0-xhbe4xp
+  Loading requirement: bzip2/1.0.8-gcc-8.5.0-iencqgj
+    libmd/1.0.4-gcc-8.5.0-vceijgj libbsd/0.12.1-gcc-8.5.0-zws72vm
+    expat/2.6.2-gcc-8.5.0-nvpfu3g ncurses/6.4-gcc-8.5.0-njp6ntc
+    readline/8.2-gcc-8.5.0-zxro3ui gdbm/1.23-gcc-8.5.0-jjbrmpa
+    libiconv/1.17-gcc-8.5.0-rznbc3y xz/5.4.6-gcc-8.5.0-lmjjipf
+    libxml2/2.10.3-gcc-8.5.0-7kur2mf pigz/2.8-gcc-8.5.0-zmpx3tm
+    tar/1.34-gcc-8.5.0-4dbwlae gettext/0.22.4-gcc-8.5.0-ayonqls
+    libffi/3.4.6-gcc-8.5.0-rwsr5pv libxcrypt/4.4.35-gcc-8.5.0-jgrwltl
+    openssl/3.2.1-gcc-8.5.0-p6hkih2 sqlite/3.43.2-gcc-8.5.0-447q5jn
+    util-linux-uuid/2.38.1-gcc-8.5.0-nj45fvo
+rm -f mpi_io  output.*
+mpicc -Wall mpi_io.c -o mpi_io
+[Process  1 ( 0,  1)] global dims: 64 x 100; local dims: 32 x 50 (0:31, 50:99);
+[Process  2 ( 1,  0)] global dims: 64 x 100; local dims: 32 x 50 (32:63, 0:49);
+[Process  0 ( 0,  0)] global dims: 64 x 100; local dims: 32 x 50 (0:31, 0:49);
+[Process  3 ( 1,  1)] global dims: 64 x 100; local dims: 32 x 50 (32:63, 50:99);

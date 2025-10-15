@@ -1,0 +1,63 @@
+Loading openmpi/5.0.5
+  Loading requirement: gcc-runtime/8.5.0-gcc-8.5.0-7fyorqa
+    gmp/6.2.1-gcc-8.5.0-lrpcvy5 mpfr/4.2.1-gcc-8.5.0-ybeybcx
+    mpc/1.3.1-gcc-8.5.0-cv2gjfw zlib-ng/2.1.6-gcc-8.5.0-ztbc5xt
+    zstd/1.5.5-gcc-8.5.0-azepnn7 gcc/13.2.0-gcc-8.5.0-5hqhkwo
+    ucx/1.15.0-gcc-8.5.0-cnozz5i
+Loading python/3.11.7-gcc-8.5.0-xhbe4xp
+  Loading requirement: bzip2/1.0.8-gcc-8.5.0-iencqgj
+    libmd/1.0.4-gcc-8.5.0-vceijgj libbsd/0.12.1-gcc-8.5.0-zws72vm
+    expat/2.6.2-gcc-8.5.0-nvpfu3g ncurses/6.4-gcc-8.5.0-njp6ntc
+    readline/8.2-gcc-8.5.0-zxro3ui gdbm/1.23-gcc-8.5.0-jjbrmpa
+    libiconv/1.17-gcc-8.5.0-rznbc3y xz/5.4.6-gcc-8.5.0-lmjjipf
+    libxml2/2.10.3-gcc-8.5.0-7kur2mf pigz/2.8-gcc-8.5.0-zmpx3tm
+    tar/1.34-gcc-8.5.0-4dbwlae gettext/0.22.4-gcc-8.5.0-ayonqls
+    libffi/3.4.6-gcc-8.5.0-rwsr5pv libxcrypt/4.4.35-gcc-8.5.0-jgrwltl
+    openssl/3.2.1-gcc-8.5.0-p6hkih2 sqlite/3.43.2-gcc-8.5.0-447q5jn
+    util-linux-uuid/2.38.1-gcc-8.5.0-nj45fvo
+rm -f main walltime.o   stats.o   data.o   operators.o   linalg.o   main.o output.*
+mpicxx -O3 -c walltime.cpp
+mpicxx -O3 -c stats.cpp
+mpicxx -O3 -c data.cpp
+mpicxx -O3 -c operators.cpp
+mpicxx -O3 -c linalg.cpp
+mpicxx -O3 -c main.cpp
+mpicxx -O3 walltime.o   stats.o   data.o   operators.o   linalg.o   main.o -o main
+Welcome to mini-stencil!
+version   :: C++ MPI
+processes :: 4
+================================================================================
+================================================================================
+                      Welcome to mini-stencil!
+version   :: C++ Serial
+================================================================================
+                      Welcome to mini-stencil!
+version   :: C++ Serial
+================================================================================
+                      Welcome to mini-stencil!
+version   :: C++ Serial
+mesh      :: 64 * 64 dx = 0.015873
+time      :: 100 time steps from 0 .. 0.005
+iteration :: CG 300, Newton 50, tolerance 1e-06
+                      Welcome to mini-stencil!
+version   :: C++ Serial
+mesh      :: 64 * 64 dx = 0.015873
+time      :: 100 time steps from 0 .. 0.005
+iteration :: CG 300, Newton 50, tolerance 1e-06
+================================================================================
+mesh      :: 64 * 64 dx = 0.015873
+time      :: 100 time steps from 0 .. 0.005
+iteration :: CG 300, Newton 50, tolerance 1e-06
+================================================================================
+mesh      :: 64 * 64 dx = 0.015873
+time      :: 100 time steps from 0 .. 0.005
+iteration :: CG 300, Newton 50, tolerance 1e-06
+================================================================================
+================================================================================
+--------------------------------------------------------------------------------
+simulation took 0.0179172 seconds
+1007 conjugate gradient iterations, at rate of 56203 iters/second
+301 newton iterations
+--------------------------------------------------------------------------------
+### 4, 64, 100, 1007, 301, 0.0179172 ###
+Goodbye!

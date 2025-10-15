@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "/home/mareng/Skeleton_codes/mpi_io/plot2.py", line 65, in <module>
+    plot_data("output.bov", save=True)
+  File "/home/mareng/Skeleton_codes/mpi_io/plot2.py", line 53, in plot_data
+    C = ax.pcolor(X, Y, data[:, :, 0], cmap="jet")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mareng/.local/lib/python3.11/site-packages/matplotlib/__init__.py", line 1476, in inner
+    return func(
+           ^^^^^
+  File "/home/mareng/.local/lib/python3.11/site-packages/matplotlib/axes/_axes.py", line 6172, in pcolor
+    X, Y, C, shading = self._pcolorargs('pcolor', *args, shading=shading,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mareng/.local/lib/python3.11/site-packages/matplotlib/axes/_axes.py", line 5975, in _pcolorargs
+    raise TypeError(f"Dimensions of C {C.shape} should"
+TypeError: Dimensions of C (64, 100) should be one smaller than X(64) and Y(100) while using shading='flat' see help(pcolor)

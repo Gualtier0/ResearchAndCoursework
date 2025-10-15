@@ -1,0 +1,272 @@
+---
+title: "Baesyan logistic regression applied to Vote prediction"
+author: "Gualtiero Marenco Turi"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+Libraries and preliminary data. The dataset chosen is HouseVotes84, a famous dataset that contains voting records of U.S. Congressmen on 16 key votes in 1984, with each record indicating a Congressman’s party affiliation (Republican or Democrat) and their votes (yes or no) on each issue
+
+
+```{r message=FALSE, warning=FALSE}
+library(dplyr)
+library(mice)
+library(ggplot2)
+library(caret)
+library(e1071)
+library(bayesplot)
+library(coda)
+library(Rcpp)
+library(rstanarm)
+library(randomForest)
+library(mlbench)  
+
+data(HouseVotes84, package = "mlbench")
+names(HouseVotes84)
+summary(HouseVotes84)
+nrow(HouseVotes84)
+
+```
+The dataset contained several missing values. Since The dataset contained several missing values. Since dropping the data would have resulted in a significant loss of information, and imputing the average was not feasible due to the nature of the variables, the MICE algorithm (Van Buuren, Groothuis-Oudshoorn, 2011) was chosen. The core idea of the algorithm is to impute the missing value with the decision that the congressman would most likely have made based on their other decisions.
+
+```{r results = "hide"}
+Hv1 <- data.frame(imputed_pmm = complete(mice(HouseVotes84, method = "pmm")))
+Hv_final = Hv1
+```
+The training set sample size was chosen to be 80% (348) of the original (435). The remaining 87 observations make up the testing set.
+
+```{r}
+#Suddivisione in dati di training e testing
+set.seed(421)
+s <- sample(nrow(Hv_final), nrow(Hv_final) * 0.8)
+vote_training = Hv_final[s,]
+vote_testing = Hv_final[-s,]
+
+```
+The first model done is Naive Bayes Classification (Kononenko, 1990). It’s a very simple model that exploits Bayes' theorem, the definition of conditional probability, and most importantly, the assumption that all covariates are independent of each other. This is seldom the case in reality (hence 'naive'), but it is often an acceptable simplification that produces good results. In this case, the resulting prediction will be used mainly as a benchmark to evaluate the other models
+```{r}
+######## Naive Bayes Classification #########
+nb2 <- naiveBayes(imputed_pmm.Class ~ ., data = vote_training, laplace = 1)
+nbfinal = nb2
+
+# Previsioni
+predict1 <- predict(nbfinal, vote_testing[,-1])
+confusion_matrix3 <- table(predict1, vote_testing$imputed_pmm.Class)
+print(confusion_matrix3)
+```
+## Logistic Regression
+The next model uses a Bayesian logistic regression, detailed below.
+The logistic function transforms a linear combination of independent variables into a probability value that ranges from 0 to 1. This function is defined as:
+
+\[
+P(Y = 1) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 X_1 + \cdots + \beta_k X_k)}}
+\]
+
+Where \( (\beta_0, \beta_1, \ldots, \beta_k) \) are the coefficients to be estimated.
+
+## Coefficients Interpretation
+
+The coefficients are interpreted as the logarithms of odds ratios. The logistic regression model equation is expressed as:
+
+\[
+\log\left(\frac{p}{1-p}\right) = \beta_0 + \beta_1 X_1 + \cdots + \beta_k X_k
+\]
+
+where \( p \) is the probability that \( Y = 1 \) given \( X \).
+
+## Simulating the Posterior
+The posterior of the coefficients is simulated through the Hamiltonian Monte Carlo algorithm (Duane et al., 1987), an instance of the Metropolis-Hastings algorithm (Metropolis 1953, Hastings 1970) where instead of a Gaussian random walk proposal distribution, the more complex Hamiltonian dynamics are used.
+Since the algorithm picks a symmetric proposal distribution, the acceptance ratio is just the product of the likelihood and the prior of the proposed over the current.
+\[
+\alpha = \min \left( 1, \frac{P(y \mid X, \beta^*) P(\beta^*)}{P(y \mid X, \beta^{(t)}) P(\beta^{(t)})} \right)
+\]
+Where $\beta^*$ is the proposed new value and $\beta^{(t)}$ is the current one. Then, a random number is generated from a Uniform[0,1] and if it's lower than $\alpha$, $\beta^*$ is accepted, otherwise the parameter stays $\beta^{(t)}$.
+
+```{r results = "hide"}
+########Bayesian Logistic regression ########
+bayes_model <- stan_glm(imputed_pmm.Class ~ ., data = vote_training, family = binomial(link = "logit"))  #by defaul 4 mcmc
+posterior <- as.array(bayes_model)
+```
+R-hat (from Gelman and Rubin (1992) but R actual version is the improved one by Vehtari and Gelman, 2021) provides a way to quantify whether multiple chains of a model are converging to the same distribution. In ideal circumstances, R-hat should approach 1, indicating that all chains are sampling from the same underlying distribution. Values significantly greater than 1.1 suggest that the chains have not yet converged, and further iterations or changes to the model are needed. The formula is as follows:
+R-hat = sqrt((Variance Between Chains) / (Variance Within Chains)). In this case, every chain converge.
+```{r}
+# Rhat
+rhat_values <- rhat(bayes_model)
+print(rhat_values)
+```
+The following command plot trace plots that keep track of the iterations of the chains after burn-in period (500, the default of R). They can be useful to give insight on the convergence of the mcmc related to each parameter and their posterior distribution. Inspecting them visually, they are expected to have a fuzzy caterpillar-like shape if they are mixing well. If they show strong drifts or trends, they may have acquired excessive autocorrelation, which may indicate problems with model specification.
+```{r}
+#Mcmc trace
+mcmc_trace(posterior)
+```
+The widely applicable information criterion (WAIC), also known as Watanabe–Akaike information criterion (from Watanabe ,2013), is the generalized version of the Akaike information criterion (AIC). It therefore include a penality for models too complex and prone to overfitting. 
+As far as model comparison goes, a model with lower WAIC describes the data better. ELPD_WAIC, developed by Vehtari and Gelman (2016), is a variation of the WAIC. When comparing these indexes, a higher number indicates a better model.
+```{r}
+#Waic
+rstanarm::waic(bayes_model)
+```
+By looking at the posterior distribution of the coefficients and to their Credible Intervals, information regarding the importance of each variable can be obtained. In particular if 0 is inside the Credible Intervals, then the variable may not be helpful to the prediction. Unique to Bayesian models, the variance of these distributions also provides information on how confident the model is in its predictions.
+```{r}
+# Significatività dei coefficienti
+summary(bayes_model)
+
+```
+The following code compute the prediction, then shows the confusion matrix and the following indexes:
+Precision = TruePositives / FalsePositives + TruePositives
+Recall= TruePositives / FalseNegatives + TruePositives
+F1Score = 2 × (Precision+Recall / Precision×Recall)
+It's important to note that better performance on the test set may not necessarily mean that the model fits the data better, as it may be overfitting but performing well on a test set similar to the training set.
+
+
+
+```{r}
+####Predictions and furter valutation for first model
+# Make predictions on the testing data
+predicted_prob <- posterior_epred(bayes_model, newdata = vote_testing)
+# Calculate the mean of the posterior predictions to get the probability
+mean_predicted_prob <- colMeans(predicted_prob)
+# Assign classes
+predicted_class <- ifelse(mean_predicted_prob > 0.5, "republican", "democrat")
+actual_class <- vote_testing$imputed_pmm.Class
+# Confusion matrix
+conf_matrix <- confusionMatrix(factor(predicted_class), factor(actual_class))
+print(conf_matrix)
+# Precision, recall, and F1 score
+precision <- conf_matrix$byClass["Pos Pred Value"]
+recall <- conf_matrix$byClass["Sensitivity"]
+f1_score <- 2 * (precision * recall) / (precision + recall)
+cat("Precision: ", precision, "\n")
+cat("Recall: ", recall, "\n")
+cat("F1 Score: ", f1_score, "\n")
+```
+By looking at the posterior distribution of the parameters in the previous model, we can see that there is a chance that some of them may not be helpful to our prediction. The next model is built handpicking those features and excluding them.
+```{r results = "hide"}
+########Log reg baesiana con variabili selezionate########
+vote_training_filtered <- vote_training %>%
+  select(-c(2, 6, 7, 9, 13, 14, 15, 16)) 
+vote_testing_filtered <- vote_testing %>%
+  select(-c(2, 6, 7, 9, 13, 14, 15, 16))
+
+bayes_model2 <- stan_glm(imputed_pmm.Class ~ ., data = vote_training_filtered, family = binomial(link = "logit"))
+posterior2 <- as.array(bayes_model2)
+
+```
+Convergence has been reached for each mcmc.
+```{r}
+# Rhat
+rhat_values2 <- rhat(bayes_model2)
+print(rhat_values2)
+```
+Fuzzy caterpillar-like shape achived
+```{r}
+#Mcmc trace
+mcmc_trace(posterior2)
+```
+The WAIC shows that this model may be fitting the data better than the previous one, probably thanks to it being more lightweight and less prone to overfitting.
+```{r}
+#Waic
+rstanarm::waic(bayes_model2)
+```
+All the coefficient have a good chance of being meaningful.
+```{r}
+# Significatività dei coefficienti
+summary(bayes_model2)
+```
+Compared to the previous model, this one performs similarly on the test set.
+```{r}
+#########Predictions and further valutation for second model###########
+# Make predictions on the testing data
+predicted_prob2 <- posterior_epred(bayes_model2, newdata = vote_testing_filtered)
+# Take the mean of the posterior predictions to get the probability
+mean_predicted_prob2 <- colMeans(predicted_prob2)
+# Assign classes 
+predicted_class2 <- ifelse(mean_predicted_prob2 > 0.5, "republican", "democrat")
+actual_class2 <- vote_testing_filtered$imputed_pmm.Class
+# Confusion matrix
+conf_matrix2 <- confusionMatrix(factor(predicted_class2), factor(actual_class2))
+print(conf_matrix2)
+# Precision, recall, and F1 score
+precision2 <- conf_matrix2$byClass["Pos Pred Value"]
+recall2 <- conf_matrix2$byClass["Sensitivity"]
+f1_score2 <- 2 * (precision2 * recall2) / (precision2 + recall2)
+cat("Precision: ", precision2, "\n")
+cat("Recall: ", recall2, "\n")
+cat("F1 Score: ", f1_score2, "\n")
+
+```
+With this fourth model the idea is to select the most important features with an algorithm, in this case a random forest.  The tree-based strategies used by random forests rank variables by how well they improve the purity of the node, or in other words, decrease the impurity (A metric called Gini impurity has been used) over all trees. 
+The idea is to mimic with R what Sklearn can do more easily in python, as in Menze. et al. (2019).
+```{r}
+#########Model with Random Tree feature selection#######
+####Importance definition
+# Random forest model to determine feature importance
+rf_model <- randomForest(imputed_pmm.Class ~ ., data = vote_training, importance = TRUE)
+# Get feature importance
+importance_scores <- importance(rf_model)
+# Sort features by importance
+sorted_importance <- sort(importance_scores[, 1], decreasing = TRUE)
+# Select top N important features
+top_n_features <- names(sorted_importance)[1:14]
+# Print top N important features
+print(top_n_features)
+
+# Subset data to include only the top N features
+vote_training_selected <- vote_training %>%
+  select(imputed_pmm.Class, all_of(top_n_features))
+vote_testing_selected <- vote_testing %>%
+  select(imputed_pmm.Class, all_of(top_n_features))
+
+```
+The MCMC for this new model converge.
+```{r results='hide'}
+#####Model
+# Bayesian logistic regression model with selected features
+bayes_model_selected <- stan_glm(imputed_pmm.Class ~ ., data = vote_training_selected, family = binomial(link = "logit"))
+posterior_selected <- as.array(bayes_model_selected)
+```
+```{r}
+# Rhat
+rhat_values_selected <- rhat(bayes_model_selected)
+print(rhat_values_selected)
+#Mcmc trace
+mcmc_trace(posterior_selected)
+```
+
+
+After having manually searched for the best number of features to pick (14), the best result shows a slight improvement in respect to the first logistical regression model but fall short of the second one. This may imply that Gini Impurity may not be the best metric for this instace, or that the random forest algorithm may need further fine-tuning. As example, v10 is the toward bottom of the list returned, however in the previous analysis it was deemed useful to the prediction. 
+```{r}
+#Waic
+rstanarm::waic(bayes_model_selected)
+```
+```{r}
+# Significatività dei coefficienti
+summary(bayes_model_selected)
+
+
+```
+The model still manage to achive a good performance on the test set.
+```{r}
+
+##### Predictions
+predicted_prob_selected <- posterior_epred(bayes_model_selected, newdata = vote_testing_selected)
+# Calculate the mean of the posterior predictions
+mean_predicted_prob_selected <- colMeans(predicted_prob_selected)
+predicted_class_selected <- ifelse(mean_predicted_prob_selected > 0.5, "republican", "democrat")
+# Create a confusion matrix
+actual_class_selected <- vote_testing_selected$imputed_pmm.Class
+conf_matrix_selected <- confusionMatrix(factor(predicted_class_selected), factor(actual_class_selected))
+print(conf_matrix_selected)
+
+# Precision, recall, and F1 score
+precision_selected <- conf_matrix_selected$byClass["Pos Pred Value"]
+recall_selected <- conf_matrix_selected$byClass["Sensitivity"]
+f1_score_selected <- 2 * (precision_selected * recall_selected) / (precision_selected + recall_selected)
+cat("Precision: ", precision_selected, "\n")
+cat("Recall: ", recall_selected, "\n")
+cat("F1 Score: ", f1_score_selected, "\n")
+
+
+
+
+
+```
+

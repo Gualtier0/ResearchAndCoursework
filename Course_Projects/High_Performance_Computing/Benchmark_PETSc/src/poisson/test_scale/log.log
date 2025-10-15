@@ -1,0 +1,50 @@
+####################################################
+Running PETSc solver with 1 processes for grid size 1024x1024
+####################################################
+----------------------------------------------------------------------------------------------------
+Poisson's Equation Solver PETSc for 1024x1024
+----------------------------------------------------------------------------------------------------
+Grid size after refinement: nx=1024, ny=1024
+Time for RHS & Matrix Assembly: 0.596123 seconds
+Time for Solve: 18.712496 seconds
+L2 Norm of the solution: 849.170472
+####################################################
+Running PETSc solver with 2 processes for grid size 1024x1024
+####################################################
+----------------------------------------------------------------------------------------------------
+Poisson's Equation Solver PETSc for 1024x1024
+----------------------------------------------------------------------------------------------------
+Grid size after refinement: nx=1024, ny=1024
+Time for RHS & Matrix Assembly: 0.328504 seconds
+Time for Solve: 7.003272 seconds
+L2 Norm of the solution: 342.137644
+####################################################
+Running PETSc solver with 4 processes for grid size 1024x1024
+####################################################
+----------------------------------------------------------------------------------------------------
+Poisson's Equation Solver PETSc for 1024x1024
+----------------------------------------------------------------------------------------------------
+Grid size after refinement: nx=1024, ny=1024
+Time for RHS & Matrix Assembly: 0.161918 seconds
+Time for Solve: 2.348554 seconds
+L2 Norm of the solution: 212.914065
+####################################################
+Running PETSc solver with 8 processes for grid size 1024x1024
+####################################################
+----------------------------------------------------------------------------------------------------
+Poisson's Equation Solver PETSc for 1024x1024
+----------------------------------------------------------------------------------------------------
+Grid size after refinement: nx=1024, ny=1024
+Time for RHS & Matrix Assembly: 0.102584 seconds
+Time for Solve: 1.035587 seconds
+L2 Norm of the solution: 85.958499
+####################################################
+Running PETSc solver with 16 processes for grid size 1024x1024
+####################################################
+----------------------------------------------------------------------------------------------------
+Poisson's Equation Solver PETSc for 1024x1024
+----------------------------------------------------------------------------------------------------
+Grid size after refinement: nx=1024, ny=1024
+Time for RHS & Matrix Assembly: 0.078165 seconds
+Time for Solve: 0.315601 seconds
+L2 Norm of the solution: 53.539897

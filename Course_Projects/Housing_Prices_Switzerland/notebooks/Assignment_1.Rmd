@@ -1,0 +1,229 @@
+---
+title: "Text Analysis and Spatial Data for Economists"
+author: "Gualtiero Marenco Turi"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document: null
+  toc: true
+  pdf_document: default
+subtitle: Assignment 1
+toc_float: true
+toc_collapsed: true
+--- 
+
+```{r setup, include=T , message = F}
+
+library(dplyr)
+library(mapview)
+library(sf)
+library(spData)
+library(osmdata)
+library(rmapshaper)
+library(ggplot2)
+library(viridis)
+#I added checks to troubleshoot, now they re commented
+```
+
+
+# Spatial operations
+
+For this exercise, we will need first to import the file `swissBOUNDARIES3D_1_5_TLM_HOHEITSGEBIET.shp` containing the municipality boundary (do not use the file `swissBOUNDARIES3D_1_5_TLM_HOHEITSGRENZE.shp`) and the `.csv` file on housing price we used in the last exercise session.
+
+To avoid issues with this exercise, you should remove the `Z` geometry (altitude of the point) of your municipality boundary object using the function `st_zm(your municipality object, drop = TRUE)`. Do not forget to save this as a new object.
+
+## Simplification
+
+The municipality boundary contains a detailed (hence precise) geometry but uses a lot of memory such that you might want to simplify it first. 
+
+In also contains several variables that might not be directly of use.
+
+* Look at the object size using `object.size()`
+* Look at the structure of the object. Could you guess which attributes might not be useful? 
+  + select only the attributes related to the name of the municipality ('NAME'), its population ('EINWOHNERZ'), area ('GEM_FLAECH'), identification number ('BFS_NUMMER') and the canton ('KANTONSNUM').
+
+
+```{r}
+#IMPORTING
+mun<- st_read("~/Desktop/spatialdata/assignement1/data/raw/Swiss boundary/swissBOUNDARIES3D_1_5_TLM_HOHEITSGEBIET.shp")
+mun1 <- st_zm(mun, drop = TRUE)
+sale<- st_read("/Users/gualtieromarencoturi/Desktop/spatialdata/assignement1/hp_small.csv", options = c("X_POSSIBLE_NAMES=longitude2", "Y_POSSIBLE_NAMES=latitude2"), stringsAsFactors=FALSE, crs = 4326)
+sale1<-st_zm(sale, drop = TRUE)
+
+#MAP FOR VISUAL INSPECTION
+sale1 %>% mapview(cex = 1, layer.name = "housing prices", legend = FALSE)
+
+```
+
+
+* Simplify the geometry using your preferred simplification method.
+  + Check the CRS of the data first and the units of measure.
+  + Save your preferred result in a new object (e.g. 'mun_simple')
+
+
+```{r}
+object.size(mun1)
+#DROP VARIABLES
+#select ('NAME'), its population ('EINWOHNERZ'), area ('GEM_FLAECH'), identification number ('BFS_NUMMER') and the canton ('KANTONSNUM').
+#names(mun1)
+mun2 <- mun1 %>% select(-UUID, -DATUM_AEND, -DATUM_ERST, -ERSTELL_J, -ERSTELL_M, -GRUND_AEND, -HERKUNFT, -HERKUNFT_J, -HERKUNFT_M, -REVISION_J, -REVISION_M, -REVISION_Q, -OBJEKTART, -BEZIRKSNUM, -BEZIRKSNUM, -SEE_FLAECH, -ICC, -SHN, -HIST_NR)
+print(mun2)
+
+#SIMPLIFICATION
+mun_s <- rmapshaper::ms_simplify(mun2, keep_shapes=TRUE)
+
+#CRS CHECK
+st_crs(mun_s)
+# crs is EPSG:2056 , units are meters
+```
+
+## Spatial join
+
+We would like now to compute the average housing price for all Swiss municipalities. To avoid outliers, we prefer to select only municipalities with at least 5 postings. 
+
+* Create a logical vector that identifies all municipalities with at least 5 postings.
+  + What should you do first?
+  + Which municipality object should you use, the original or the simplified one? Why?
+
+First, we should make sure that the two objects have the same coordinate system.
+We should use mun_s if wanting to prioritize performance and visualization speed. Since mun_s is a simplified version of mun2, it will process faster and reduce computational overhead, but it might lose some geometric accuracy. If precise boundary definitions are rquired, mun_2 would be a better choice. I'll go with the original.
+
+
+```{r}
+#first we need same crs 
+sale2 <- st_transform(sale1, crs = st_crs(mun2))
+
+#now join and group
+sale_with_mun <- st_join(sale2, mun2, left = FALSE)
+
+postings_per_mun <- sale_with_mun %>%
+  group_by(BFS_NUMMER) %>%
+  summarise(count = n())
+
+sale_with_mun_count <- st_join(sale_with_mun, postings_per_mun, join = st_intersects) %>%
+  filter(count >= 5) #this can be seen as the logic vector
+#if a logical vector is needed (useless for my code)
+logical_vector <- postings_per_mun$count >= 5
+binary_vector <- as.integer(logical_vector)
+#checks
+#print(binary_vector)
+#print(sale_with_mun_count)
+#print(postings_per_mun)
+#print(sale_with_mun)
+```
+
+## Spatial subsetting
+
+* Create an object containing only municipalities with at least 5 postings.
+
+```{r}
+mun_filtered <- mun2 %>%
+  filter(BFS_NUMMER %in% postings_per_mun$BFS_NUMMER)
+#check
+#print(mun_filtered)
+```
+
+* Plot these municipalities
+
+```{r}
+#not sure what kind of plot is asked, I'll do a map because rule of cool
+#color opt is geom_sf sfill for inside, color for outside
+ggplot(data = mun_filtered) +
+  geom_sf(fill = "lightblue", color = "black") + 
+  ggtitle("Municipalities with at Least 5 Postings") + 
+  theme_minimal()
+
+```
+
+* Add to this object the corresponding housing prices 
+
+```{r}
+
+#a_brutm_mon is the rent/month
+#which is full of n/a. in order not to affect the dataset so i'll use the option to exclude them every time. using something like MICE would be best but probably beyond the scope of the project.
+#and its character, need to be converted 
+
+sale2$a_brutm_mon <- as.numeric(as.character(sale2$a_brutm_mon))
+
+# average housing price per municipality
+avg_prices <- sale2 %>%
+  st_join(mun2, left = FALSE) %>% 
+  group_by(BFS_NUMMER) %>%
+  summarise(avg_price = mean(a_brutm_mon, na.rm = TRUE))
+#finally lets join
+mun_final <- st_join(mun_filtered, avg_prices, join = st_intersects)
+
+#checks
+#print(mun_final)
+#print(avg_prices)
+```
+
+## Spatial aggregation
+
+* Compute the annual rental price per square meter (a_brutm_m2) per municipality (use the variable BFS_NUMMER to identify them) with at least 5 observations. First convert the variable a_brutm_m2 to numeric with, e.g., the function `type.convert(x, dec=".")`.
+
+```{r}
+#its bfscode1 for sale but its the same stuff
+# require to convert a_brutm_m2 to numeric
+sale2$a_brutm_m2 <- type.convert(sale2$a_brutm_m2, dec = ".", as.is = TRUE)
+
+# spatial join
+sale2 <- st_join(sale2, mun2, left = FALSE)  
+
+# verage rental price per m² per municipality w/ 5 insertions
+mun_rental_sqprice <- sale2 %>%
+  group_by(BFS_NUMMER) %>%
+  summarise(
+    count = n(),
+    mean_rent_m2 = mean(a_brutm_m2, na.rm = TRUE)
+  ) %>%
+  filter(count >= 5)
+
+#checks
+#print(mun_rental_sqprice)
+#print(sale2)
+```
+
+* Plot the average housing price per square meter 
+
+```{r}
+#again, I'll do a map, I like them
+#mun_plot_data has less municipalities than mun_filtered as the first only includes municipalities where at least 5 listings had a valid a_brutm_m2 value due to the use of na.rm = TRUE to adress missing values. If i wanted them to be the same i could have imputed the missing values before plotting but that would not fit the strategy of picking only municipalities with 5+ insertions for CONSISTENCY purposes.
+mun_plot_data <- st_join(mun_final, mun_rental_sqprice, left = FALSE)  
+
+ggplot(data = mun_plot_data) +
+  geom_sf(aes(fill = mean_rent_m2), color = "black", size = 0.2) +  
+  scale_fill_viridis_c(option = "plasma") +  #from https://rpubs.com/mjvoss/psc_viridis
+  ggtitle("Average price per m² per month") +
+  labs(fill = "chf/m²") #or at least i suppose chf
+```
+
+
+## Distances
+
+Select all postings in the canton of Ticino that are located within a 1km distance of a municipality border
+  
+* How would you approach this problem? 
+I would use st_boundary and st_distance to compute which items are withing range of the border.
+* What information do you need?
+Consinstent crs, which also means we are sure that measure are in meters.
+* **Think carefully at how distance are computed for different geometries**
+st_distance compute the distance between closer points so if we use boundaries and pick the min we should be fine.
+* Before doing any analysis, you should remove the `Z` geometry (altitude of the point) using the function `st_zm(your municipality object, drop = TRUE)` 
+
+```{r}
+# CRS and z geom drop were already done previously
+# gettin ticino's municipality borders
+ticino_mun <- mun2 %>% filter(KANTONSNUM == "21") #got the n by checking the places on the ds on googlemap
+ticino_borders <- st_boundary(ticino_mun)
+
+#Comp distance from posting to municipality borders and pick if within 1000
+dist_matrix <- st_distance(sale2, ticino_borders)
+sale2$dist_to_border <- apply(dist_matrix, 1, min) # picking minimum as out of the previous matrix it s the distance we are interested in
+sale_near_border <- sale2 %>% filter(dist_to_border <= 1000)
+# map (its commented cause it was asked to use only necessary maps but its helpful to check)
+#mapview(sale_near_border, color = "blue") + mapview(ticino_borders, color = "black")
+
+```
+
+
+
