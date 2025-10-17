@@ -13,7 +13,7 @@ It includes both research efforts and course related projects across machine lea
 | [CNN_Thesis](./CNN_Thesis) | Bachelor’s thesis work on Modern Methods in Computer Vision. |
 | [Course_Projects](./Course_Projects) | Collection of coursework projects in AI, ML, NLP, and computational modeling (details below). |
 | [RSI_investigation_Topp](./RSI_investigation_Topp) | Investigation into frequency irregularities in Topps stickers, partnered with Radio della Svizzera Italiana.|
-| [Relational_Event_Models](./Relational_Event_Models) | Modeling of temporal interactions in dynamic networks using relational event processes. |
+| [Relational_Event_Models](./Relational_Event_Models) | Modelling of temporal interactions in dynamic networks using relational event processes. |
 | [Concept Embedding Model MSC Thesis](./Master-Thesis-CEM-Depression-etc-case-study)| Master Thesis On CEM applied to mental health. Wip and Currently private, will be made public upon paper acceptance.|
 ---
 
