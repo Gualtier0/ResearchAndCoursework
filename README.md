@@ -1,7 +1,7 @@
 # Research and Coursework Portfolio
 
 This repository collects selected projects from my MSc and early research work in **Computational Science**, **Artificial Intelligence**, and **Data Analysis**.  
-It includes both individual research efforts and course-related projects demonstrating practical experience across machine learning, NLP, explainability, and data science.
+It includes both individual research efforts and course related projects across machine learning, NLP, explainability, and data science.
 
 ---
 
@@ -9,10 +9,10 @@ It includes both individual research efforts and course-related projects demonst
 
 | Folder | Description |
 |---------|--------------|
-| [AI4Privacy_Hackaton](./AI4Privacy_Hackaton) | Privacy-preserving AI hackathon project — focus on federated and differential privacy approaches. |
-| [CNN_Thesis](./CNN_Thesis) | Master’s thesis work on **side-channel analysis** using convolutional neural networks (ASCAD dataset). |
-| [Course_Projects](./Course_Projects) | Collection of advanced coursework projects in AI, ML, NLP, and computational modeling (details below). |
-| [RSI_investigation_Topp](./RSI_investigation_Topp) | Exploratory project on signal irregularities and statistical interpretation of random sequence inputs. |
+| [AI4Privacy_Hackaton](./AI4Privacy_Hackaton) | Privacy focussed AI hackathon project. |
+| [CNN_Thesis](./CNN_Thesis) | Bachelor’s thesis work on Modern Methods in Computer Vision. |
+| [Course_Projects](./Course_Projects) | Collection of coursework projects in AI, ML, NLP, and computational modeling (details below). |
+| [RSI_investigation_Topp](./RSI_investigation_Topp) | Investigation into frequency irregularities in Topps stickers, partnered with Radio della Svizzera Italiana.|
 
 ---
 
