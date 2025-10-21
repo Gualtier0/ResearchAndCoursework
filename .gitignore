@@ -3,5 +3,5 @@ __pycache__/
 *.zip
 *.npz
 *.pkl
-.DS_Store
+**/.DS_Store
 
