@@ -15,6 +15,8 @@ It includes both research efforts and course related projects across machine lea
 | [RSI_investigation_Topp](./RSI_investigation_Topp) | Investigation into frequency irregularities in Topps stickers, partnered with Radio della Svizzera Italiana.|
 | [Relational_Event_Models](./Relational_Event_Models) | Modelling of temporal interactions in dynamic networks using relational event processes. |
 | [Concept Embedding Model MSC Thesis](./Master-Thesis-CEM-Depression-etc-case-study)| Master Thesis On CEM applied to mental health. Wip and Currently private, will be made public after pubblication.|
+| [nlpcompetition @ 8829be3](./nlpcompetition) | Multimodal fact-checking system for the **AVerImaTeC Shared Task (EACL2026)**. Verifies image-text claims using web evidence and generates verdicts with justifications. Improved baseline model from [AVerImaTeC](https://github.com/abril4416/AVerImaTeC). |
+
 ---
 
 ## Course Projects
