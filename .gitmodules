@@ -2,3 +2,6 @@
 	path = Master-Thesis-CEM-Depression-etc-case-study
 	url = https://github.com/Gualtier0/Master-Thesis-CEM-Depression-etc-case-study
 	branch = main
+[submodule "nlpcompetition"]
+	path = nlpcompetition
+	url = https://github.com/riccardosacco/nlpcompetition
