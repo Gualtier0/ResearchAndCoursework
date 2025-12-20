@@ -1,6 +1,6 @@
 # Research and Coursework Portfolio
 
-This repository collects selected projects from my MSc and early research work in **Computational Science**, **Artificial Intelligence**, and **Data Analysis**.
+This repository collects selected projects from my MSc and early research work in **Computational Science**, **Artificial Intelligence**, **Statistics** and **Data Analysis**.
 It includes both research efforts and course related projects across machine learning, NLP, explainability, and data science.
 
 ---
