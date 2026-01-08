@@ -3,7 +3,8 @@
 This repository collects selected projects from my MSc and early research work in **Computational Science**, **Artificial Intelligence**, **Statistics** and **Data Analysis**.
 It includes both research efforts and course related projects across machine learning, NLP, explainability, and data science.
 
-⚠️ If you are here for an application, you likely to check the abstract of my thesis in the [0_ABSTRACT_THESIS_FOR_APPLICATION](./0_ABSTRACT_THESIS_FOR_APPLICATION) folder.
+⚠️ If you are here for an application, you likely want to check the abstract of my thesis in the [0_ABSTRACT_THESIS_FOR_APPLICATION](./0_ABSTRACT_THESIS_FOR_APPLICATION) folder.
+
 ---
 
 ## Overview
