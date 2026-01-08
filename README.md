@@ -11,12 +11,13 @@ It includes both research efforts and course related projects across machine lea
 
 | Folder | Description |
 |---------|--------------|
+| [0_ABSTRACT_THESIS_FOR_APPLICATION](./0_ABSTRACT_THESIS_FOR_APPLICATION) | The abstract of my Master's Thesis. |
 | [AI4Privacy_Hackaton](./AI4Privacy_Hackaton) | Privacy focussed AI hackathon project. |
 | [CNN_Thesis](./CNN_Thesis) | Bachelor’s thesis work on Modern Methods in Computer Vision. |
 | [Course_Projects](./Course_Projects) | Collection of coursework projects in AI, ML, NLP, and computational modeling (details below). |
 | [RSI_investigation_Topp](./RSI_investigation_Topp) | Investigation into frequency irregularities in Topps stickers, partnered with Radio della Svizzera Italiana.|
 | [Relational_Event_Models](./Relational_Event_Models) | Modelling of temporal interactions in dynamic networks using relational event processes. |
-| [Concept Embedding Model MSC Thesis](./Master-Thesis-CEM-Depression-etc-case-study)| Master Thesis On CEM applied to mental health. Wip and Currently private, will be made public after pubblication.|
+| [Concept Embedding Model MSC Thesis](./Master-Thesis-CEM-Depression-etc-case-study)| Master Thesis On CEM applied to mental health. Wip and Currently private, will be made public after defence, for now, refer to the abstract.|
 | [nlpcompetition @ 8829be3](./nlpcompetition) | Multimodal fact-checking system for the **AVerImaTeC Shared Task (EACL2026)**. Verifies image-text claims using web evidence and generates verdicts with justifications. Improved baseline model from [AVerImaTeC](https://github.com/abril4416/AVerImaTeC). |
 
 ---
