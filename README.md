@@ -49,4 +49,4 @@ It includes both research efforts and course related projects across machine lea
 
 **Gualtiero Marenco Turi**  
 📧 gualtiero1999@gmail.com  
-🔗 [LinkedIn](https://www.linkedin.com/in/gualtiero-marenco-turi-27507a292?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)  
+🔗 [LinkedIn](https://www.linkedin.com/in/gualtiero-marenco-turi_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)  
