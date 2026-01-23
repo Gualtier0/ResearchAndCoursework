@@ -3,9 +3,8 @@
 This repository collects selected projects from my MSc and early research work in **Computational Science**, **Artificial Intelligence**, **Statistics** and **Data Analysis**.
 It includes both research efforts and course related projects across machine learning, NLP, explainability, and data science.
 
-⚠️ If you are here for an application, you likely want to check the abstract of my thesis in the [0_ABSTRACT_THESIS_FOR_APPLICATION](./0_ABSTRACT_THESIS_FOR_APPLICATION) folder, the whole thesis can be found under [Master-Thesis-CEM-Depression-case-study/docs](./Master-Thesis-CEM-Depression-case-study/docs).
+⚠️ If you are here for an application, you likely want to check the abstract of my thesis in the [0_ABSTRACT_THESIS_FOR_APPLICATION](./0_ABSTRACT_THESIS_FOR_APPLICATION) folder, the whole thesis can be found under [Master-Thesis-CEM-Depression-case-study/docs](./Master-Thesis-CEM-Depression-case-study/tree/d71cf7c6f76adaecc82fcc1722f3e390b9610dc9/docs).
 
----
 
 ## Overview
 
