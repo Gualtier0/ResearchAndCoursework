@@ -3,7 +3,7 @@
 This repository collects selected projects from my MSc and early research work in **Computational Science**, **Artificial Intelligence**, **Statistics** and **Data Analysis**.
 It includes both research efforts and course related projects across machine learning, NLP, explainability, and data science.
 
-⚠️ If you are here for an application, you likely want to check the abstract of my thesis in the [0_ABSTRACT_THESIS_FOR_APPLICATION](./0_ABSTRACT_THESIS_FOR_APPLICATION) folder, the whole thesis can be found under [Master-Thesis-CEM-Depression-case-study/docs](./Master-Thesis-CEM-Depression-case-study/tree/main/docs).
+⚠️ If you are here for an application, you likely want to check the abstract of my thesis in the [0_ABSTRACT_THESIS_FOR_APPLICATION](./0_ABSTRACT_THESIS_FOR_APPLICATION) folder, the whole thesis can be found under [Master Thesis Docs](https://github.com/Gualtier0/Master-Thesis-CEM-Depression-case-study/tree/main/docs).
 
 
 ## Overview
@@ -16,7 +16,7 @@ It includes both research efforts and course related projects across machine lea
 | [Course_Projects](./Course_Projects) | Collection of coursework projects in AI, ML, NLP, and computational modeling (details below). |
 | [RSI_investigation_Topp](./RSI_investigation_Topp) | Investigation into frequency irregularities in Topps stickers, partnered with Radio della Svizzera Italiana.|
 | [Relational_Event_Models](./Relational_Event_Models) | Modelling of temporal interactions in dynamic networks using relational event processes. |
-| [Master-Thesis-CEM-Depression-case-study/docs](./Master-Thesis-CEM-Depression-case-study/tree/main/docs) | Master Thesis On CEM applied to mental health. |
+| [Master-Thesis-CEM-Depression-case-study](https://github.com/Gualtier0/Master-Thesis-CEM-Depression-case-study/tree/main) | Master Thesis On CEM applied to mental health. |
 | [nlpcompetition @ 8829be3](./nlpcompetition) | Multimodal fact-checking system for the **AVerImaTeC Shared Task (EACL2026)**. Verifies image-text claims using web evidence and generates verdicts with justifications. Improved baseline model from [AVerImaTeC](https://github.com/abril4416/AVerImaTeC). |
 
 ---
