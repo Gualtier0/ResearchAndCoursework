@@ -33,6 +33,7 @@ It includes both research efforts and course related projects across machine lea
 | [Philosophy_for_AI](./Course_Projects/Philosophy_for_AI) | Research essay exploring epistemological implications of context windows in LLMs. |
 | [Simple_ML_Architectures](./Course_Projects/Simple_ML_Architectures) | Implementation of basic neural network architectures with NumPy and backpropagation. |
 | [Security_Aspects_of_ML](./Course_Projects/Security_Aspects_of_ML) | Projects on ML robustness and security, including anomaly detection, hardware trojan detection, and side-channel analysis (ASCAD). |
+| [Deep Learning Lab](./Course_Projects/Deep_Learning_Lab) | PyTorch Implementations of several staple Deep Learning Architectures on becnhmark dataset |
 
 
 ---
